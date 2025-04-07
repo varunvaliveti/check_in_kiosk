@@ -1,18 +1,89 @@
-<table>
-  <thead>
-    <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Check in time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @students.each do |student| %>
-      <tr>
-        <td><%= student.first_name %></td>
-        <td><%= student.last_name %></td>
-        <td><%= student.check_in_time %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="container mt-5">
+  <h1>Student Check-in Kiosk</h1>
+
+ 
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>Check In</h2>
+    </div>
+    <div class="card-body">
+      <%= form_with(model: @student, local: true) do |form| %>
+        <% if @student.errors.any? %>
+          <div class="alert alert-danger">
+            <ul>
+              <% @student.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :first_name, class: "form-label" %>
+            <%= form.text_field :first_name, class: "form-control", required: true %>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <%= form.label :last_name, class: "form-label" %>
+            <%= form.text_field :last_name, class: "form-control", required: true %>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :email, class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", required: true, 
+                              pattern: ".+@.+(\.edu|\.org)$", 
+                              title: "Please enter a valid .edu email address" %>
+          <div class="form-text">valid .edu email address needed</div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :major, class: "form-label" %>
+          <%= form.select :major, @majors, 
+                         { include_blank: "Select your major" }, 
+                         { class: "form-select", required: true } %>
+        </div>
+
+        <div class="d-grid">
+          <%= form.submit "Check In", class: "btn btn-primary btn-lg" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Recent Check-ins</h2>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Email</th>
+              <th>Major</th>
+              <th>Last Check-in</th>
+              <th>Check-in Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @students.each do |student| %>
+              <tr>
+                <td><%= student.first_name %></td>
+                <td><%= student.last_name %></td>
+                <td><%= student.email %></td>
+                <td><%= student.major %></td>
+                <td><%= student.check_in_time.strftime("%b %d, %Y %I:%M %p") %></td>
+                <td><%= student.check_in_count %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

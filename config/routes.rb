@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   get "/index", to: "students#index"
-  # root "students#index"
+  resources :students, only: [:index, :create]
+
+  root "students#index"
   # post "/index", to: "students#create"
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
